@@ -1,0 +1,79 @@
+From 67b0cde358a31c83b5d1103b3ac1423ac00fbb74 Mon Sep 17 00:00:00 2001
+From: Tobias Oetiker <tobi@oetiker.ch>
+Date: Tue, 22 Sep 2015 13:38:46 +0200
+Subject: [PATCH 2/3] fix xport incompatibility ... make it possible to
+ re-include the time into the xml output
+
+---
+ doc/rrdxport.pod |  5 +++++
+ src/rrd_xport.c  | 10 ++++++++--
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/doc/rrdxport.pod b/doc/rrdxport.pod
+index 1e71a17..bd26644 100644
+--- a/doc/rrdxport.pod
++++ b/doc/rrdxport.pod
+@@ -10,6 +10,7 @@ S<[B<-e>|B<--end> I<seconds>]>
+ S<[B<-m>|B<--maxrows> I<rows>]>
+ S<[B<--step> I<value>]>
+ S<[B<--json>]>
++S<[B<--showtime>]>
+ S<[B<--enumds>]>
+ S<[B<--daemon>|B<-d> I<address>]>
+ S<[B<DEF:>I<vname>B<=>I<rrd>B<:>I<ds-name>B<:>I<CF>]>
+@@ -60,6 +61,10 @@ For a list of accepted formats, see the B<-l> option in the L<rrdcached> manual.
+ 
+   rrdtool xport --daemon unix:/var/run/rrdcached.sock ...
+ 
++=item B<--showtime>
++
++include the time into each data row.
++
+ =item B<--json>
+ 
+ produce json formated output (instead of xml)
+diff --git a/src/rrd_xport.c b/src/rrd_xport.c
+index 610cded..35ed656 100644
+--- a/src/rrd_xport.c
++++ b/src/rrd_xport.c
+@@ -83,7 +83,8 @@ int rrd_xport(
+         {"maxrows",'m', OPTPARSE_REQUIRED},
+         {"step",   261, OPTPARSE_REQUIRED},
+         {"enumds", 262, OPTPARSE_NONE},
+-        {"json",   263, OPTPARSE_NONE},    /* these are handled in the frontend ... */
++        {"json",   263, OPTPARSE_NONE},
++        {"showtime", 't', OPTPARSE_NONE},
+         {"daemon", 'd', OPTPARSE_REQUIRED},
+         {0}
+     };
+@@ -95,7 +96,8 @@ int rrd_xport(
+ 
+     int enumds=0;
+     int json=0;
+-
++    int showtime=0;
++    
+     int opt;
+     while ((opt = optparse_long(&options,longopts,NULL)) != -1){
+ 
+@@ -109,6 +111,9 @@ int rrd_xport(
+         case 263:
+   	    json=1;
+             break;
++        case 't':
++  	    showtime=1;
++            break;
+         case 's':
+             if ((parsetime_error = rrd_parsetime(options.optarg, &start_tv))) {
+                 rrd_set_error("start time: %s", parsetime_error);
+@@ -198,6 +203,7 @@ int rrd_xport(
+     if (!xsize) {
+       int flags=0;
+       if (json) { flags|=1; }
++      if (showtime) { flags|=2; }
+       if (enumds) { flags|=4; }
+       stringbuffer_t buffer={0,0,NULL,stdout};
+       rrd_xport_format_xmljson(flags,&buffer,&im,
+-- 
+2.1.4
+

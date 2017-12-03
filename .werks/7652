@@ -1,0 +1,10 @@
+Title: Diskspace cleanup config is now synced to slave sites like other settings
+Level: 1
+Component: omd
+Compatible: compat
+Edition: cre
+Version: 1.4.0b9
+Date: 1495541172
+Class: fix
+
+

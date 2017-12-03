@@ -1,0 +1,127 @@
+diff --git a/src/librrd.sym.in.in b/src/librrd.sym.in.in
+index 55d6d6b..c307592 100644
+--- a/src/librrd.sym.in.in
++++ b/src/librrd.sym.in.in
+@@ -58,6 +58,7 @@ rrd_strerror
+ rrd_strversion
+ rrd_tell
+ rrd_test_error
++rrd_thread_init
+ rrd_tune
+ rrd_update
+ rrd_update_r
+diff --git a/src/rrd.h b/src/rrd.h
+index 937a23e..4edfe4b 100644
+--- a/src/rrd.h
++++ b/src/rrd.h
+@@ -379,6 +379,7 @@ int       rrd_proc_start_end(
+ 
+ /** UTILITY FUNCTIONS */
+ 
++    void rrd_thread_init(void);
+     long rrd_random(void);
+ 
+     int rrd_add_ptr_chunk(void ***dest, size_t *dest_size, void *src,
+diff --git a/src/rrd_create.c b/src/rrd_create.c
+index 0680fba..ddb4c83 100644
+--- a/src/rrd_create.c
++++ b/src/rrd_create.c
+@@ -89,6 +89,7 @@ int rrd_create(
+     const char **sources_array = NULL;
+     char *template = NULL;
+     
++    rrd_thread_init();
+     optind = 0;
+     opterr = 0;         /* initialize getopt */
+ 
+@@ -801,6 +802,7 @@ int rrd_create_r2(
+     int mappings_cnt = 0;
+     const char *require_version = NULL;
+     
++    rrd_thread_init();
+     /* clear any previous errors */
+     rrd_clear_error();
+ 
+diff --git a/src/rrd_daemon.c b/src/rrd_daemon.c
+index 26d8e89..9a91b88 100644
+--- a/src/rrd_daemon.c
++++ b/src/rrd_daemon.c
+@@ -4532,6 +4532,7 @@ int main (int argc, char **argv)
+ {
+   int status;
+ 
++  rrd_thread_init();
+   // Determine logfile path within user directory
+   set_logfile_path();
+ 
+diff --git a/src/rrd_graph.c b/src/rrd_graph.c
+index f2d559c..fb85999 100644
+--- a/src/rrd_graph.c
++++ b/src/rrd_graph.c
+@@ -4553,6 +4553,7 @@ rrd_info_t *rrd_graph_v(
+ {
+     image_desc_t im;
+     rrd_info_t *grinfo;
++    rrd_thread_init();
+     rrd_graph_init(&im,0);
+     /* a dummy surface so that we can measure text sizes for placements */
+     rrd_graph_options(argc, argv, &im);
+diff --git a/src/rrd_tune.c b/src/rrd_tune.c
+index 12cb18b..3ddf51e 100644
+--- a/src/rrd_tune.c
++++ b/src/rrd_tune.c
+@@ -114,6 +114,7 @@ int rrd_tune(
+         {0, 0, 0, 0}
+     };
+ 
++    rrd_thread_init();
+     optind = 0;
+     opterr = 0;         /* initialize getopt */
+ 
+diff --git a/src/rrd_update.c b/src/rrd_update.c
+index 946221d..06d4714 100644
+--- a/src/rrd_update.c
++++ b/src/rrd_update.c
+@@ -691,6 +691,7 @@ int rrd_update(
+     int       rc = -1;
+     char     *opt_daemon = NULL;
+ 
++    rrd_thread_init();
+     optind = 0;
+     opterr = 0;         /* initialize getopt */
+ 
+diff --git a/src/rrd_utils.c b/src/rrd_utils.c
+index 0ff25f1..b18d2ea 100644
+--- a/src/rrd_utils.c
++++ b/src/rrd_utils.c
+@@ -25,6 +25,7 @@
+ 
+ #include <assert.h>
+ #include <errno.h>
++#include <glib.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/types.h>
+@@ -263,3 +264,10 @@ const char * rrd_scaled_duration (const char * token,
+     return NULL;
+ }
+ 
++void rrd_thread_init(void)
++{
++#if !GLIB_CHECK_VERSION(2, 32, 0)
++    if (!g_thread_supported())
++        g_thread_init(NULL);
++#endif
++}
+diff --git a/src/rrd_xport.c b/src/rrd_xport.c
+index 6f1d423..be57c5f 100644
+--- a/src/rrd_xport.c
++++ b/src/rrd_xport.c
+@@ -89,6 +89,7 @@ int rrd_xport(
+         {0}
+     };
+ 
++    rrd_thread_init();
+     rrd_graph_init(&im,1);
+ 
+     rrd_parsetime("end-24h", &start_tv);

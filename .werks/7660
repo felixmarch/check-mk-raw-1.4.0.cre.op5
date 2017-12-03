@@ -1,0 +1,11 @@
+Title: Added missing livedump binary to bin path
+Level: 1
+Component: packages
+Class: fix
+Compatible: compat
+Edition: cre
+State: unknown
+Version: 1.4.0p7
+Date: 1498200321
+
+

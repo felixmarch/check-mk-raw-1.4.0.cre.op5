@@ -1,0 +1,11 @@
+Title: PNP4Nagios: Fixed PHP export when using PHP7
+Level: 1
+Component: packages
+Class: fix
+Compatible: compat
+Edition: cre
+State: unknown
+Version: 1.4.0b7
+Date: 1494497537
+
+

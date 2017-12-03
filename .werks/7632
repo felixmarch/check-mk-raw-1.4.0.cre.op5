@@ -1,0 +1,22 @@
+Title: dokuwiki: Exclude bw.png icons from indexmenu plugin (licensing reason)
+Level: 1
+Component: packages
+Class: fix
+Compatible: compat
+State: unknown
+Version: 1.4.0b3
+Date: 1487839162
+
+The dokuwiki shipped with OMD includes the indexmenu plugin which are both licensed under
+the terms of the GPLv2. But the indexmenu plugin contains some images below the folder
+"indexmenu/images/bw.png" that contain images with the following copyright notices:
+
+<li>
+    <ul>./indexmenu/images/bw.png/folderh.png: Copyright: Creative Commons Attribution Non-Commercial No Derivatives</ul>
+    <ul>./indexmenu/images/bw.png/folderopen.png Copyright: Creative Commons Attribution Non-Commercial No Derivatives</ul>
+    <ul>./indexmenu/images/bw.png/base.png Copyright: Creative Commons Attribution Non-Commercial No Derivatives</ul>
+    <ul>./indexmenu/images/bw.png/page.png Copyright: Creative Commons Attribution Non-Commercial No Derivatives</ul>
+    <ul>./indexmenu/images/bw.png/folder.png Copyright: Creative Commons Attribution Non-Commercial No Derivatives</ul>
+</li>
+
+These images have now been removed from our packages to resolve this licensing issue.

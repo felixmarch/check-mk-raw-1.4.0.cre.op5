@@ -1,0 +1,12 @@
+Title: Debian Stretch: Added missing dependency to apache2
+Level: 2
+Component: deb
+Compatible: compat
+Edition: cre
+Version: 1.4.0p6
+Date: 1497972047
+Class: fix
+
+To workaround this issue with previous Check_MK versions 
+install the apache2 package manually before installing
+Check_MK.

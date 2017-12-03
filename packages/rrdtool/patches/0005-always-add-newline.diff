@@ -1,0 +1,15 @@
+diff --git a/src/rrd_daemon.c b/src/rrd_daemon.c
+index b8e64c0..bedd937 100644
+--- a/src/rrd_daemon.c
++++ b/src/rrd_daemon.c
+@@ -1983,9 +1983,7 @@ static int handle_request_fetch (HANDLER_PROTO) /* {{{ */
+ 	linebuf_fill = 0;
+       }
+     }
+-    if (linebuf_fill>0) {
+-      add_response_info (sock, "%s\n", linebuf);
+-    }
++    add_response_info (sock, "%s\n", linebuf);
+   } /* for (t) */
+   free_fetch_parsed(&parsed);
+ 
