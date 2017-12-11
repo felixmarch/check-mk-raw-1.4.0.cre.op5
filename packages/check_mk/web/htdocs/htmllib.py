@@ -959,22 +959,26 @@ var myHeight = $(document).height();
 var myInterval = myHeight*20; //in milliseconds
 //console.log($(document).height(), "Helloooo world!");
 
-var timer = setInterval(function(){
+var timers = [];
+var t1 = setInterval(function(){
     // 1000 - it will take 1 second in total from the top of the page to the bottom
     $("html, body").animate({ scrollTop: myHeight }, myInterval);
-    timer = setTimeout(function() {
+    var t2 = setTimeout(function() {
         $('html, body').animate({scrollTop:0}, myInterval); 
-    },1000);
+    },1000); 
+    timers.push(t2);
 },2000);
+timers.push(t1);
 
 $(document).keyup(function(e) {
     //alert(e.which);
     if(e.which == 27){
         //alert('escape');
         //clearInterval(timer);
-        for (var i = 1; i < 99999; i++)
-            clearInterval(i);
-        $('html, body').stop(); 
+        //for (var i = 1; i < 99999; i++)
+        //    clearInterval(i);
+        timers.forEach(clearInterval);
+        $('html, body').stop(true); 
         //console.log($(document).height(), "stop animation!");
     }
 });
