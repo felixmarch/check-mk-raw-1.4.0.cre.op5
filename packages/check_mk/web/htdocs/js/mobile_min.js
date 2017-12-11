@@ -1,0 +1,1 @@
+$(document).ready(function(){$("a").attr("data-ajax","false");$("form").attr("data-ajax","false");$("div.error").addClass("ui-shadow");$("div.success").addClass("ui-shadow");$("div.really").addClass("ui-shadow");$("div.warning").addClass("ui-shadow");});$(document).bind("mobileinit",function(){$.mobile.ajaxEnabled=false;$.mobile.hashListeningEnabled=false;});
