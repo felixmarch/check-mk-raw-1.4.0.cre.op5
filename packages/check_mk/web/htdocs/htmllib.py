@@ -948,6 +948,39 @@ class HTMLCheck_MK(HTMLGenerator):
             else:
                 self.javascript('set_reload(%s)' % (self.browser_reload))
 
+        enable_animation = False #True
+        if enable_animation:
+            self.javascript_file('js/jquery_git.js') 
+            self.javascript('''
+//<![CDATA[
+$(function(){
+//run instantly and then goes after (setTimeout interval)
+var myHeight = $(document).height();
+var myInterval = myHeight*20; //in milliseconds
+//console.log($(document).height(), "Helloooo world!");
+
+var timer = setInterval(function(){
+    // 1000 - it will take 1 second in total from the top of the page to the bottom
+    $("html, body").animate({ scrollTop: myHeight }, myInterval);
+    timer = setTimeout(function() {
+        $('html, body').animate({scrollTop:0}, myInterval); 
+    },1000);
+},2000);
+
+$(document).keyup(function(e) {
+    //alert(e.which);
+    if(e.which == 27){
+        //alert('escape');
+        //clearInterval(timer);
+        for (var i = 1; i < 99999; i++)
+            clearInterval(i);
+        $('html, body').stop(); 
+        //console.log($(document).height(), "stop animation!");
+    }
+});
+
+});//]]> 
+''')
         self.close_head()
 
 
