@@ -454,7 +454,8 @@ def iconpainter_columns(what, toplevel):
     for icon_id, icon in get_multisite_icons().items():
         if toplevel == None or toplevel == icon['toplevel']:
             if 'columns' in icon:
-                cols.update([ what + '_' + c for c in icon['columns'] ])
+                #cols.update([ what + '_' + c for c in icon['columns'] ])
+                cols.update([ '' + c for c in icon['columns'] ])
             cols.update([ "host_" + c for c in icon.get("host_columns", [])])
             if what == "service":
                 cols.update([ "service_" + c for c in icon.get("service_columns", [])])
@@ -776,9 +777,10 @@ multisite_painters["svc_state_age"] = {
 }
 
 def paint_checked(what, row):
+    return "", ""
     age = row[what + "_last_check"]
     if what == "service":
-        cached_at = row["service_cached_at"]
+        cached_at = row.get("service_cached_at", "")
         if cached_at:
             age = cached_at
 
@@ -790,16 +792,16 @@ def paint_checked(what, row):
 multisite_painters["svc_check_age"] = {
     "title"   : _("The time since the last check of the service"),
     "short"   : _("Checked"),
-    "columns" : [ "service_has_been_checked", "service_last_check", "service_cached_at" ],
+    "columns" : [ "icon_image", "icon_image", "icon_image" ],
     "options" : [ "ts_format", "ts_date" ],
     "paint"   : lambda row: paint_checked("service", row),
 }
 
 def paint_cache_info(row):
-    if not row["service_cached_at"]:
+    if not row.get("service_cached_at", ""):
         return "", ""
     else:
-        cached_at = row["service_cached_at"]
+        cached_at = row.get("service_cached_at", "")
         cache_interval = row["service_cache_interval"]
         cache_age = time.time() - cached_at
 
@@ -815,7 +817,7 @@ def paint_cache_info(row):
 multisite_painters["svc_check_cache_info"] = {
     "title"   : _("Cached agent data"),
     "short"   : _("Cached"),
-    "columns" : [ "service_last_check", "service_cached_at", "service_cache_interval" ],
+    "columns" : [ "icon_image", "icon_image", "icon_image" ],
     "options" : [ "ts_format", "ts_date" ],
     "paint"   : lambda row: paint_cache_info(row),
 }

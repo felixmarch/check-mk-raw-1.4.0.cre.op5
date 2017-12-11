@@ -883,5 +883,6 @@ multisite_icons_and_actions['check_period'] = {
     'toplevel' : True,
 }
 
+multisite_icons_and_actions.clear()
 
 #.
