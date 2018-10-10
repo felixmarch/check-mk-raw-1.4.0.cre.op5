@@ -38,6 +38,7 @@ service_view_painters = [
 
 # Same as list of services, but extended by the hostname
 host_service_view_painters = service_view_painters[:]
+host_service_view_painters.insert(1, ('alias', 'alias'))
 host_service_view_painters.insert(1, ('host', 'host'))
 
 host_view_painters = [
@@ -1507,6 +1508,8 @@ multisite_builtin_views.update({
                  'group_painters': [('service_state', None)],
                  'hard_filters': ['in_downtime'],
                  'hard_filtervars': [('is_in_downtime', '0'),
+                                     ('service_regex', 'System Load and Log if Critical'),
+                                     ('neg_service_regex', 'on'),
                                      ('st0', ''),
                                      ('st1', 'on'),
                                      ('st2', 'on'),

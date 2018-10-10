@@ -263,6 +263,7 @@ builtin_dashboards["simple_problems"] = {
             'painters': [
                          ('host_state', None),
                          ('host', 'host'),
+                         ('alias', 'alias'),
                          ('host_icons', None),
                          ('host_state_age', None),
                          ('host_plugin_output', None),
@@ -307,6 +308,7 @@ builtin_dashboards["simple_problems"] = {
             'owner': '',
             'painters': [('service_state', None),
                          ('host', 'host'),
+                         ('alias', 'alias'),
                          ('service_description', 'service'),
                          ('service_icons', None),
                          ('svc_plugin_output', None),
